@@ -1,0 +1,28 @@
+body{
+    margin: 0;
+}
+.bg{
+    color:white;
+    background: #142c4b;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    margin: 0;
+    display: flex;
+    padding: 0 30px;
+    text-align: center;
+}
+.title{
+    font-family: "Reem Kufi", sans-serif;
+    font-size: 2.5em;
+    font-weight: 600;
+}
+.sub-title{
+    margin: 1.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+.generator{
+    margin: 1.5rem 0;
+
+}
