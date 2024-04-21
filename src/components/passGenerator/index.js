@@ -15,6 +15,8 @@ const PassGenerator = () => {
     const [noAPI, setNoAPI] = useState(false)
     const {TextArea} = Input;
     const CheckboxGroup = Checkbox.Group;
+    const [passwordMode, setPasswordMode] = useState('random-password');
+
 
     useEffect(() => {
         // 在组件加载时生成随机密码
@@ -42,31 +44,99 @@ const PassGenerator = () => {
         console.log("passwd:", password)
     };
 
+    //生成PIN密码
+    const generatePin = () => {
+        let pin = '';
+        for (let i = 0; i < passNumber; i++) {
+            pin += Math.floor(Math.random() * 10); // 生成 0 到 9 之间的随机数字
+        }
+        setGeneratedPasswd(pin);
+    };
+
     const NumonChange = (list) => {
         setCheckedList(list);
         // 在复选框变化时重新生成密码
         generatePassword();
     };
 
+
+    useEffect(() => {
+        if (passwordMode === 'random-password') {
+            generatePassword();
+        } else {
+            generatePin();
+        }
+    }, [passNumber, checkedList, passwordMode]);
+
+    // const handlePassNumberChange = (value) => {
+    //     setPassNumber(value);
+    //     // 在密码长度变化时重新生成密码
+    //     // generatePassword();
+    // };
+    // useEffect(() => {
+    //     generatePassword();
+    // }, [passNumber, checkedList]);
+
+
+
+    // const handlePassNumberChange = (value, isPin) => {
+    //     setPassNumber(value);
+    //     if (!isPin) {
+    //         generatePassword();
+    //     } else {
+    //         generatePin();
+    //     }
+    // };
+    //
+    // const selectType = (value) => {
+    //     if (value === 'random-password') {
+    //         handlePassNumberChange(passNumber, false);
+    //     } else if (value === 'PIN') {
+    //         handlePassNumberChange(passNumber, true);
+    //     }
+    // };
     const handlePassNumberChange = (value) => {
         setPassNumber(value);
-        // 在密码长度变化时重新生成密码
-        generatePassword();
+        if (passwordMode === 'random-password') {
+            generatePassword();
+        } else {
+            generatePin();
+        }
     };
+
+    const selectType = (value) => {
+        setPasswordMode(value);
+        if (value === 'random-password') {
+            generatePassword();
+        } else {
+            generatePin();
+        }
+    };
+
+
+
 
     const numberPass = () => {
         return (
             <div className='popover'>
                 <label>长度：</label>
-                <Slider defaultValue={16} min={8} max={50} tooltip={{open: true}} onChange={handlePassNumberChange}/>
+                {/*<Slider defaultValue={16} min={8} max={50} tooltip={{open: true}} onChange={handlePassNumberChange}/>*/}
+                <Slider defaultValue={16} min={8} max={50} tooltip={{open: true}} onChange={(value) => handlePassNumberChange(value, false)}/>
                 <CheckboxGroup options={plainOptions} value={checkedList} onChange={NumonChange}/>
             </div>
         );
     };
 
-    const selectType = (value) => {
-        console.log(`selected${value}`);
-    };
+    // const selectType = (value) => {
+    //     if (value === 'random-password') {
+    //         generatePassword();
+    //     } else if (value === 'PIN') {
+    //         generatePin();
+    //     }
+    // };
+
+
+
 
     const clickCopy = () => {
         // 检查浏览器是否支持 Clipboard API
